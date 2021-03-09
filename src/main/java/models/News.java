@@ -11,4 +11,36 @@ public class News {
         this.idDepartment= idDepartment;
         this.usernameId= usernameId;
     }
+
+    public int getIdDepartment(int idDepartment){
+        return idDepartment;
+    }
+    public void setIdDepartment(int idDepartment) {
+        this.idDepartment = idDepartment;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public int getUsernameId() {
+        return usernameId;
+    }
+
+    public void setUsernameId(int usernameId) {
+        this.usernameId = usernameId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 }
