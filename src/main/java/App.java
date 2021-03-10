@@ -1,6 +1,8 @@
+import dao.DepartmentDao;
 import models.Department;
 import models.News;
 import models.User;
+import org.sql2o.Sql2o;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 import com.google.gson.Gson;
@@ -14,108 +16,38 @@ import static spark.Spark.*;
 
 public class App {
 
-    static int getHerokuAssignedPort() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        if (processBuilder.environment().get("PORT") != null) {
-            return Integer.parseInt(processBuilder.environment().get("PORT"));
-        }
-        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
-    }
+//    static int getHerokuAssignedPort() {
+//        ProcessBuilder processBuilder = new ProcessBuilder();
+//        if (processBuilder.environment().get("PORT") != null) {
+//            return Integer.parseInt(processBuilder.environment().get("PORT"));
+//        }
+//        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
+//    }
 
     public static void main(String[] args) {
-        Connection conn;
-        Gson gson = new Gson();
-
-        port(getHerokuAssignedPort());
+       // port(getHerokuAssignedPort());
         staticFileLocation("/public");
 
-        get("/", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "welcome.hbs");
-        },new HandlebarsTemplateEngine());
 
-        get("/welcome", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "departmentform.hbs");
-        },new HandlebarsTemplateEngine());
+        Connection conn;
+        Gson gson = new Gson();
+        String connectionString = "jdbc:h2:~/jadle.db;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
+        Sql2o sql2o = new Sql2o(connectionString, "isaac", "kaptoge");
 
-        get("/departmentform", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "departmentform.hbs");
-        },new HandlebarsTemplateEngine());
-
-        get("/viewdepartments", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("departments", Department.getAll());
-            return new ModelAndView(model, "viewdepartments.hbs");
-        },new HandlebarsTemplateEngine());
-
-        post("/departments", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
-            String nameOfDepartment = request.queryParams("nameOfDepartment");
-            String detail = request.queryParams("detail");
-            int numberEmployees = Integer.parseInt(request.queryParams("numberEmployees"));
-            Department newDepartment = new Department(nameOfDepartment, detail, numberEmployees);
-            newDepartment.save(newDepartment);
-            List<Department> departments = Department.getAll();
-            model.put("departments", departments);
-            return new ModelAndView(model, "viewdepartments.hbs");
-        }, new HandlebarsTemplateEngine());
+        post("/department", "application/json", (req, res) -> {
+            Department department = gson.fromJson(req.body(), Department.class);
+            DepartmentDao.add(department);
+            res.status(201);
+            res.type("application/json");
+            return gson.toJson(department);
+        });
 
 
-        get("/userform", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("departments", Department.getAll());
-            return new ModelAndView(model, "userform.hbs");
-        },new HandlebarsTemplateEngine());
+        get("/department", "application/json", (req, res) -> { //accept a request in format JSON from an app
+            res.type("application/json");
+            return gson.toJson(DepartmentDao.getAll());//send it back to be displayed
+        });
 
-        get("/viewusers", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("departments", Department.getAll());
-            model.put("users", User.getAll());
-            return new ModelAndView(model, "viewusers.hbs");
-        },new HandlebarsTemplateEngine());
-
-        post("/users", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
-            String username = request.queryParams("username");
-            int idDepartment = Integer.parseInt(request.queryParams("idDepartment"));
-            String role = request.queryParams("role");
-            String position = request.queryParams("position");
-            User newUser = new User(username, idDepartment, role, position);
-            newUser.save(newUser);
-            List<User> users = User.getAll();
-            model.put("users", users);
-            return new ModelAndView(model, "viewusers.hbs");
-        }, new HandlebarsTemplateEngine());
-
-        get("/newsform", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("departments", Department.getAll());
-            model.put("users", User.getAll());
-            return new ModelAndView(model, "newsform.hbs");
-        },new HandlebarsTemplateEngine());
-
-        get("/viewnews", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("departments", Department.getAll());
-            model.put("users", User.getAll());
-            model.put("news", News.getAll());
-            return new ModelAndView(model, "viewnews.hbs");
-        },new HandlebarsTemplateEngine());
-
-        post("/news", (request, response) -> {
-            Map<String, Object> model = new HashMap<>();
-            String content = request.queryParams("content");
-            int idDepartment = Integer.parseInt(request.queryParams("idDepartment"));
-            int usernameId = Integer.parseInt(request.queryParams("usernameId"));
-            News newNews = new News(content, idDepartment, usernameId);
-            newNews.save(newNews);
-            List<News> news = News.getAll();
-            model.put("news", news);
-            return new ModelAndView(model, "viewnews.hbs");
-        }, new HandlebarsTemplateEngine());
 
     }
-
 }
