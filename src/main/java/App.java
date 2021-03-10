@@ -3,6 +3,8 @@ import models.News;
 import models.User;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
+import com.google.gson.Gson;
+import org.sql2o.Connection;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,8 @@ public class App {
     }
 
     public static void main(String[] args) {
+        Connection conn;
+        Gson gson = new Gson();
 
         port(getHerokuAssignedPort());
         staticFileLocation("/public");
