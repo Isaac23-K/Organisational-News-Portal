@@ -1,5 +1,6 @@
 package models;
-import org.sql2o.*;
+
+import java.util.List;
 
 public class User {
     private int id;
@@ -15,7 +16,7 @@ public class User {
         this.position = position ;
     }
 
-    public static Object getAll() {
+    public static List<User> getAll() {
         return getAll();
     }
 
@@ -55,5 +56,8 @@ public class User {
     public void setPosition(String position) {
 
         this.position = position;
+    }
+
+    public void save(User newUser) {
     }
 }

@@ -71,7 +71,18 @@ public class App {
             return new ModelAndView(model, "viewusers.hbs");
         },new HandlebarsTemplateEngine());
 
-
+        post("/users", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            String username = request.queryParams("username");
+            int idDepartment = Integer.parseInt(request.queryParams("idDepartment"));
+            String role = request.queryParams("role");
+            String position = request.queryParams("position");
+            User newUser = new User(username, idDepartment, role, position);
+            newUser.save(newUser);
+            List<User> users = User.getAll();
+            model.put("users", users);
+            return new ModelAndView(model, "viewusers.hbs");
+        }, new HandlebarsTemplateEngine());
     }
 
 }
