@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class News {
     private int id ;
     private String content ;
@@ -10,6 +12,10 @@ public class News {
         this.content= content ;
         this.idDepartment= idDepartment;
         this.usernameId= usernameId;
+    }
+
+    public static List<News> getAll() {
+        return getAll();
     }
 
     public int getIdDepartment(int idDepartment){
@@ -43,4 +49,6 @@ public class News {
         this.id = id;
     }
 
+    public void save(News newNews) {
+    }
 }

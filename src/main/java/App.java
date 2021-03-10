@@ -1,4 +1,5 @@
 import models.Department;
+import models.News;
 import models.User;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
@@ -83,6 +84,33 @@ public class App {
             model.put("users", users);
             return new ModelAndView(model, "viewusers.hbs");
         }, new HandlebarsTemplateEngine());
+        get("/newsform", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("departments", Department.getAll());
+            model.put("users", User.getAll());
+            return new ModelAndView(model, "newsform.hbs");
+        },new HandlebarsTemplateEngine());
+
+        get("/viewnews", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("departments", Department.getAll());
+            model.put("users", User.getAll());
+            model.put("news", News.getAll());
+            return new ModelAndView(model, "viewnews.hbs");
+        },new HandlebarsTemplateEngine());
+
+        post("/news", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            String content = request.queryParams("content");
+            int idDepartment = Integer.parseInt(request.queryParams("idDepartment"));
+            int usernameId = Integer.parseInt(request.queryParams("usernameId"));
+            News newNews = new News(content, idDepartment, usernameId);
+            newNews.save(newNews);
+            List<News> news = News.getAll();
+            model.put("news", news);
+            return new ModelAndView(model, "viewnews.hbs");
+        }, new HandlebarsTemplateEngine());
+
     }
 
 }
