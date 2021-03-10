@@ -1,5 +1,8 @@
 package models;
 
+import org.sql2o.Connection;
+import org.sql2o.Sql2oException;
+
 import java.util.List;
 
 public class User {
@@ -14,10 +17,6 @@ public class User {
         this.username = username ;
         this.role = role;
         this.position = position ;
-    }
-
-    public static List<User> getAll() {
-        return getAll();
     }
 
     public int getId(){
@@ -58,6 +57,24 @@ public class User {
         this.position = position;
     }
 
-    public void save(User newUser) {
+    public void save(User user) {
+        String sql = "INSERT INTO users (username, idDepartment, role, position) VALUES (:username, :idDepartment, :role, :position)";
+        try (Connection con = DB.sql2o.open()) {
+            int id = (int) con.createQuery(sql, true)
+                    .bind(user)
+                    .throwOnMappingFailure(false)
+                    .executeUpdate()
+                    .getKey();
+            user.setId(id);
+        } catch (Sql2oException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public static List<User> getAll(){
+        try(Connection con = DB.sql2o.open()){
+            return con.createQuery("SELECT * FROM users")
+                    .executeAndFetch(User.class);
+        }
     }
 }
