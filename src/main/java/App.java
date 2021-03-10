@@ -3,6 +3,7 @@ import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -42,6 +43,18 @@ public class App {
             model.put("departments", Department.getAll());
             return new ModelAndView(model, "viewdepartments.hbs");
         },new HandlebarsTemplateEngine());
+
+        post("/departments", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
+            String nameOfDepartment = request.queryParams("nameOfDepartment");
+            String detail = request.queryParams("detail");
+            int numberEmployees = Integer.parseInt(request.queryParams("numberEmployees"));
+            Department newDepartment = new Department(nameOfDepartment, detail, numberEmployees);
+            newDepartment.save(newDepartment);
+            List<Department> departments = Department.getAll();
+            model.put("departments", departments);
+            return new ModelAndView(model, "viewdepartments.hbs");
+        }, new HandlebarsTemplateEngine());
 
 
     }

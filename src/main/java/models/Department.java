@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class Department {
         private int id;
         private String nameOfDepartment;
@@ -12,7 +14,7 @@ public class Department {
             this.numberEmployees = numberEmployees;
         }
 
-    public static Object getAll() {
+    public static List<Department> getAll() {
             return getAll();
     }
 
@@ -48,4 +50,6 @@ public class Department {
             this.id = id;
         }
 
+    public void save(Department newDepartment) {
     }
+}
