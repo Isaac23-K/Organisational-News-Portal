@@ -16,7 +16,7 @@ public class Sql2oUserDao implements UserDao{
 
     @Override
     public void add(User user) {
-        String sql = "INSERT INTO user(name) VALUES (:name)";
+        String sql = "INSERT INTO users (name) VALUES (:name)";
         try(Connection con = sql2o.open()){
             int id = (int) con.createQuery(sql, true)
                     .bind(user)
@@ -31,7 +31,7 @@ public class Sql2oUserDao implements UserDao{
     @Override
     public List<User> getAll() {
         try(Connection con = sql2o.open()){
-            return con.createQuery("SELECT * FROM user")
+            return con.createQuery("SELECT * FROM users")
                     .executeAndFetch(User.class);
         }
     }
@@ -40,7 +40,7 @@ public class Sql2oUserDao implements UserDao{
 
     @Override
     public void deleteById(int id) {
-        String sql = "DELETE from user WHERE id=:id"; //raw sql
+        String sql = "DELETE from users WHERE id=:id"; //raw sql
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("id", id)
@@ -52,7 +52,7 @@ public class Sql2oUserDao implements UserDao{
 
     @Override
     public void clearAll() {
-        String sql = "DELETE from user";
+        String sql = "DELETE from users";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql).executeUpdate();
         } catch (Sql2oException ex) {

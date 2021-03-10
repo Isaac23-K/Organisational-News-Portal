@@ -1,8 +1,12 @@
 import com.google.gson.Gson;
 import dao.*;
+import exceptions.ApiException;
 import models.User;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static spark.Spark.*;
 
@@ -41,9 +45,24 @@ public class App {
         });
 
 
-        get("/department", "application/json", (req, res) -> { //accept a request in format JSON from an app
-            res.type("application/json");
-            return gson.toJson(DepartmentDao.getAll());//send it back to be displayed
+        get("/users", "application/json", (req, res) -> { //accept a request in format JSON from an app
+            User user = gson.fromJson(req.body(),User.class);
+            UserDao.add(user);
+            res.status(201);
+            return gson.toJson(UserDao.getAll());//send it back to be displayed
+        });
+
+        exception(ApiException.class, (exception, request, response) -> {
+            ApiException err = exception;
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("status", err.getStatusCode());
+            jsonMap.put("errorMessage", err.getMessage());
+            response.type("application/json");
+            response.status(err.getStatusCode());
+            response.body(gson.toJson(jsonMap));
+        });
+        after((request, response) ->{
+            response.type("application/json");
         });
 
 
