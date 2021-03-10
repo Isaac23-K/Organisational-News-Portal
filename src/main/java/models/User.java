@@ -14,6 +14,11 @@ public class User {
         this.role = role;
         this.position = position ;
     }
+
+    public static Object getAll() {
+        return getAll();
+    }
+
     public int getId(){
         return id;
     }

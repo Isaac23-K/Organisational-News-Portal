@@ -1,4 +1,5 @@
 import models.Department;
+import models.User;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
@@ -55,6 +56,20 @@ public class App {
             model.put("departments", departments);
             return new ModelAndView(model, "viewdepartments.hbs");
         }, new HandlebarsTemplateEngine());
+
+
+        get("/userform", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("departments", Department.getAll());
+            return new ModelAndView(model, "userform.hbs");
+        },new HandlebarsTemplateEngine());
+
+        get("/viewusers", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("departments", Department.getAll());
+            model.put("users", User.getAll());
+            return new ModelAndView(model, "viewusers.hbs");
+        },new HandlebarsTemplateEngine());
 
 
     }
