@@ -12,7 +12,11 @@ public class Department {
             this.numberEmployees = numberEmployees;
         }
 
-        public String getNameOfDepartment() {
+    public static Object getAll() {
+            return getAll();
+    }
+
+    public String getNameOfDepartment() {
             return nameOfDepartment;
         }
 
