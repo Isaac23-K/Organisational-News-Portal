@@ -50,7 +50,7 @@ public class News {
     }
 
     public void save(News news) {
-        String sql = "INSERT INTO news (content, iddepartment, usernameid) VALUES (:content, :idDepartment, :usernameId);";
+        String sql = "INSERT INTO news (content, idDepartment, usernameid) VALUES (:content, :idDepartment, :usernameId);";
         try (Connection con = DB.sql2o.open()) {
             int id = (int) con.createQuery(sql, true)
                     .bind(news)
