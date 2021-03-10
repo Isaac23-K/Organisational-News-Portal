@@ -51,7 +51,7 @@ public class Department {
         }
 
     public void save(Department department) {
-        String sql = "INSERT INTO departs (nameofdepartment, detail, numberemployees) VALUES (:nameOfDepartment, :detail, :numberEmployees);";
+        String sql = "INSERT INTO departments(nameofdepartment, detail, numberemployees) VALUES (:nameOfDepartment, :detail, :numberEmployees);";
         try (Connection con = DB.sql2o.open()) {
             int id = (int) con.createQuery(sql, true)
                     .bind(department)
@@ -66,7 +66,7 @@ public class Department {
 
     public static List<Department> getAll(){
         try(Connection con = DB.sql2o.open()){
-            return con.createQuery("SELECT * FROM departs")
+            return con.createQuery("SELECT * FROM departments")
                     .executeAndFetch(Department.class);
         }
     }

@@ -84,6 +84,7 @@ public class App {
             model.put("users", users);
             return new ModelAndView(model, "viewusers.hbs");
         }, new HandlebarsTemplateEngine());
+
         get("/newsform", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("departments", Department.getAll());

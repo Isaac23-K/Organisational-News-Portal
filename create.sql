@@ -3,6 +3,6 @@ CREATE DATABASE companynews;
 
 CREATE TABLE users( id SERIAL PRIMARY KEY , username VARCHAR , position VARCHAR , role VARCHAR , idDepartment VARCHAR);
 CREATE TABLE news(id SERIAL PRIMARY KEY, content VARCHAR, usernameid VARCHAR, idDepartment INT);
-CREATE TABLE departments(id SERIAL PRIMARY KEY, nameOfDepartment VARCHAR, details VARCHAR, numberemployees INTEGER);
+CREATE TABLE departments(id SERIAL PRIMARY KEY, nameofdepartment VARCHAR, detail VARCHAR, numberemployees INTEGER);
 
 CREATE DATABASE companynews_test WITH TEMPLATE companynews;
