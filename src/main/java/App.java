@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 import dao.*;
 import exceptions.ApiException;
+import models.Department;
 import models.User;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
@@ -65,6 +66,18 @@ public class App {
             response.type("application/json");
         });
 
+        get("/department","application/json" ,(req, res) -> {
+        Department department = gson.fromJson(req.body(),Department.class);
+        DepartmentDao.add(department);
+        res.status(201);
+        return gson.toJson(DepartmentDao.getAll());
+        });
 
+        post("/department/new","application/json", (req, res) -> {
+            Department department = gson.fromJson(req.body(),Department.class);
+            DepartmentDao.add(department);
+            res.status(201);
+            return gson.toJson(department);
+        });
     }
 }
