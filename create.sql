@@ -1,8 +1,8 @@
-CREATE DATABASE companynews;
+CREATE DATABASE company_news;
 \c
 
-CREATE TABLE users( id SERIAL PRIMARY KEY , username VARCHAR , position VARCHAR , role VARCHAR , idDepartment VARCHAR);
-CREATE TABLE news(id SERIAL PRIMARY KEY, content VARCHAR, usernameid VARCHAR, idDepartment INT);
-CREATE TABLE departments(id SERIAL PRIMARY KEY, nameofdepartment VARCHAR, detail VARCHAR, numberemployees INTEGER);
+CREATE TABLE users( id SERIAL PRIMARY KEY , username VARCHAR , position VARCHAR , role VARCHAR , department_id VARCHAR);
+CREATE TABLE news(id SERIAL PRIMARY KEY, content VARCHAR, user_id INT, department_id INT);
+CREATE TABLE departments(id SERIAL PRIMARY KEY, name VARCHAR, detail VARCHAR, employees INTEGER);
 
-CREATE DATABASE companynews_test WITH TEMPLATE companynews;
+CREATE DATABASE company_news_test WITH TEMPLATE company_news;

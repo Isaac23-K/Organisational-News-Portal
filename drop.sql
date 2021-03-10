@@ -1,2 +1,2 @@
-DROP DATABASE companynews;
-DROP DATABASE companynews_test;
+DROP DATABASE company_news;
+DROP DATABASE company_news_test;

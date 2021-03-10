@@ -2,11 +2,11 @@ package dao;
 
 import models.Department;
 
-public class DepartmentDao {
-    public static void add(Department department) {
-    }
+import java.util.List;
 
-    public static Object getAll() {
-        return getAll();
-    }
+public interface DepartmentDao {
+    void add(Department department);
+    List<Department> getAll();
+
+    void clearAll();
 }

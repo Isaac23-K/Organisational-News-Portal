@@ -1,16 +1,8 @@
-import dao.DepartmentDao;
-import models.Department;
-import models.News;
-import models.User;
-import org.sql2o.Sql2o;
-import spark.ModelAndView;
-import spark.template.handlebars.HandlebarsTemplateEngine;
 import com.google.gson.Gson;
+import dao.*;
+import models.User;
 import org.sql2o.Connection;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.sql2o.Sql2o;
 
 import static spark.Spark.*;
 
@@ -23,23 +15,29 @@ public class App {
 //        }
 //        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
 //    }
-
     public static void main(String[] args) {
+        Sql2oNewsDao NewsDao;
+        Sql2oUserDao UserDao;
+        Sql2oDepartmentsDao DepartmentDao;
+        Connection conn;
+        Gson gson = new Gson();
+
        // port(getHerokuAssignedPort());
         staticFileLocation("/public");
 
 
-        Connection conn;
-        Gson gson = new Gson();
-        String connectionString = "jdbc:h2:~/jadle.db;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
+        String connectionString = "jdbc:postgresql://localhost:5432/company_news_test";
         Sql2o sql2o = new Sql2o(connectionString, "isaac", "kaptoge");
+        DepartmentDao = new Sql2oDepartmentsDao(sql2o);
+        UserDao = new Sql2oUserDao(sql2o);
+        NewsDao = new Sql2oNewsDao(sql2o);
+        conn = sql2o.open();
 
-        post("/department", "application/json", (req, res) -> {
-            Department department = gson.fromJson(req.body(), Department.class);
-            DepartmentDao.add(department);
+        post("/users/new", "application/json", (req, res) -> {
+            User user = gson.fromJson(req.body(), User.class);
+            UserDao.add(user);
             res.status(201);
-            res.type("application/json");
-            return gson.toJson(department);
+            return gson.toJson(user);
         });
 
 
